@@ -1,6 +1,7 @@
 package com.ToDo.todoApp.Services;
 
 import com.ToDo.todoApp.Repositories.GroupRepository;
+import com.ToDo.todoApp.exception.AlreadyExistException;
 import com.ToDo.todoApp.exception.NotFoundException;
 import com.ToDo.todoApp.mappers.GroupMapping;
 import com.ToDo.todoApp.model.Dtos.GroupDtos.GroupDto;
@@ -13,14 +14,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GroupService {
     @Autowired
-    GroupRepository groupRepository;
+    private GroupRepository groupRepository;
     @Autowired
-    GroupMapping groupMapping;
+    private GroupMapping groupMapping;
 
     public List<GroupDto> showAllGroups(){
         List<GroupDto> groups = new ArrayList<>();
@@ -33,9 +35,11 @@ public class GroupService {
     }
 
     public void createGroup (GroupDtoCreateGroup createGroup){
-        GroupTasks group = new GroupTasks();
-        group.setName(createGroup.getName());
-        groupRepository.save(group);
+        Optional<GroupTasks> group = groupRepository.findByName(createGroup.getName());
+        if(group.isPresent()){
+            throw  new AlreadyExistException("group already exist");
+        }else
+            groupRepository.save(groupMapping.mapCreateToGroup(createGroup));
     }
 
 

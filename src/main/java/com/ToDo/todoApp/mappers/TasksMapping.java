@@ -1,9 +1,12 @@
 package com.ToDo.todoApp.mappers;
 
+import com.ToDo.todoApp.Repositories.GroupRepository;
+import com.ToDo.todoApp.exception.NotFoundException;
 import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoTaskInGroup;
 import com.ToDo.todoApp.model.Entity.Task;
 import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoCreateTask;
 import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoShowAllAndShowById;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.List;
 
 @Component
 public class TasksMapping {
+    @Autowired
+    GroupRepository groupRepository;
 
     public TaskDtoShowAllAndShowById mapTaskToTaskDtoShowAllAndShowById(Task task){
         TaskDtoShowAllAndShowById taskDtoShowAllAndShowById = new TaskDtoShowAllAndShowById();
@@ -19,7 +24,7 @@ public class TasksMapping {
         taskDtoShowAllAndShowById.setDeadline(task.getDeadline());
         taskDtoShowAllAndShowById.setDone(task.isDone());
         taskDtoShowAllAndShowById.setDescription(task.getDescription());
-        taskDtoShowAllAndShowById.setGroupId(taskDtoShowAllAndShowById.getGroupId());
+        taskDtoShowAllAndShowById.setGroupId(task.getGroup().getId());
         return taskDtoShowAllAndShowById;
     }
 
@@ -28,6 +33,8 @@ public class TasksMapping {
         task.setDeadline(createTask.getDeadline());
         task.setDescription(createTask.getDescription());
         task.setDone(createTask.isDone());
+        task.setGroup(groupRepository.findById(createTask.getGroupId()).orElseThrow(() -> new NotFoundException("Group  does not exist")));
+
         return task;
     }
 
@@ -35,6 +42,7 @@ public class TasksMapping {
         TaskDtoTaskInGroup taskDtoTaskInGroup = new TaskDtoTaskInGroup();
         taskDtoTaskInGroup.setDescription(task.getDescription());
         taskDtoTaskInGroup.setId(task.getId());
+        taskDtoTaskInGroup.setDone(task.isDone());
         return taskDtoTaskInGroup;
     }
 

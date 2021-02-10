@@ -14,4 +14,5 @@ public class TaskDtoCreateTask {
     private boolean done;
     @NotNull
     private LocalDate deadline;
+    private  long groupId;
 }

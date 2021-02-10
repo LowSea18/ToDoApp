@@ -30,9 +30,16 @@ public class TaskController {
     public void updateTask(@PathVariable (name = "id") Long id, @RequestBody TaskDtoUpdateTask updateTask){
         taskService.updateTask(updateTask,id);
     }
-    @PostMapping("/task/{task_id}/group/{group_id}")
-    public void addTaskToGroup (@PathVariable (name = "task_id") Long taskId, @PathVariable (name = "group_id") Long groupId){
-        taskService.addTaskToGroup(taskId,groupId);
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTask(@PathVariable (name = "id") Long id){
+        taskService.deleteTask(id);
     }
+
+    @PostMapping("/tasks/done/{id}")
+    public void setDoneTask(@PathVariable(name = "id") Long id){
+        taskService.setDoneTask(id);
+    }
+
+    //todo jak sie robi taska to sprawdzenie czy w jego grupie wszsytkie sa zrobione jak tam to zmieniasz grouptask is done
 
 }

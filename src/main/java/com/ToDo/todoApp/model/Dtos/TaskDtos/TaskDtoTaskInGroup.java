@@ -8,4 +8,5 @@ import java.time.LocalDate;
 public class TaskDtoTaskInGroup {
     private Long id;
     private String description;
+    private boolean done;
 }

@@ -1,6 +1,7 @@
 package com.ToDo.todoApp.Services;
 
 import com.ToDo.todoApp.Repositories.GroupRepository;
+import com.ToDo.todoApp.exception.AlreadyExistException;
 import com.ToDo.todoApp.exception.NotFoundException;
 import com.ToDo.todoApp.exception.WrongDateException;
 import com.ToDo.todoApp.mappers.TasksMapping;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,11 +62,25 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public void addTaskToGroup(Long taskId,Long groupId){
-       Task task = taskRepository.findById(taskId).orElseThrow(()-> new NotFoundException("Task does not exist, id:" + taskId));
-      GroupTasks groupTasks = groupRepository.findById(groupId).orElseThrow(()-> new NotFoundException("Group does not exist, id:" + groupId));
-      task.setGroup(groupTasks);
-      taskRepository.save(task);
+    public void setDoneTask(Long id){
+        Task task = taskRepository.findById(id).orElseThrow(()-> new NotFoundException("Task does not exist"));
+        if(task.isDone()){
+            throw new AlreadyExistException("Task is already done!");
+        }else{
+            task.setDone(true);
+            taskRepository.save(task);
+            GroupTasks groupTasks = task.getGroup();
+            List<Task> tasks = groupTasks.getTasksInGroup().stream().filter(t -> !task.isDone()).collect(Collectors.toList());
+            if(tasks.isEmpty()){
+                groupTasks.setDone(true);
+                groupRepository.save(groupTasks);
+            }
+
+        }
+
+
     }
+
+
 
 }
