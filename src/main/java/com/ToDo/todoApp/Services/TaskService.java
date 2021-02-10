@@ -55,6 +55,14 @@ public class TaskService {
             task.setDescription(updateTask.getDescription());
             task.setDone(updateTask.isDone());
             taskRepository.save(task);
+            GroupTasks groupTasks = task.getGroup();
+            List<Task> tasks = groupTasks.getTasksInGroup().stream().filter(t -> !task.isDone()).collect(Collectors.toList());
+            if(tasks.isEmpty()){
+                groupTasks.setDone(true);
+                groupRepository.save(groupTasks);
+            }else
+                groupTasks.setDone(false);
+                groupRepository.save(groupTasks);
         }
     }
     public void deleteTask(Long id){
