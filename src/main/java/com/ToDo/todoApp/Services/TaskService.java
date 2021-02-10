@@ -45,6 +45,9 @@ public class TaskService {
             throw new WrongDateException("Wrong date!");
         }else
             taskRepository.save(tasksMapping.mapTaskDtoCreateTaskToTask(createTask));
+           GroupTasks groupTasks = groupRepository.findById(createTask.getGroupId()).orElseThrow();
+           groupTasks.setDone(false);
+           groupRepository.save(groupTasks);
     }
     public void updateTask(TaskDtoUpdateTask updateTask, Long id){
         if(updateTask.getDeadline().isBefore(LocalDate.now())){

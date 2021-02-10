@@ -20,7 +20,7 @@ public class GroupTasks {
     private LocalDateTime deadline;
     @NotNull
     private String name;
-    private boolean done;
+    private boolean done =false;
     @OneToMany(mappedBy = "group")
     private List<Task> tasksInGroup;
 }

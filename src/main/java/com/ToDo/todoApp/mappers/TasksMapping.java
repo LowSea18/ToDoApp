@@ -32,9 +32,7 @@ public class TasksMapping {
         Task task = new Task();
         task.setDeadline(createTask.getDeadline());
         task.setDescription(createTask.getDescription());
-        task.setDone(createTask.isDone());
         task.setGroup(groupRepository.findById(createTask.getGroupId()).orElseThrow(() -> new NotFoundException("Group  does not exist")));
-
         return task;
     }
 

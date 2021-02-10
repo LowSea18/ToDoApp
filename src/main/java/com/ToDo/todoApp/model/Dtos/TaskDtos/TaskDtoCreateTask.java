@@ -11,8 +11,6 @@ public class TaskDtoCreateTask {
     @NotNull
     private String description;
     @NotNull
-    private boolean done;
-    @NotNull
     private LocalDate deadline;
     private  long groupId;
 }
