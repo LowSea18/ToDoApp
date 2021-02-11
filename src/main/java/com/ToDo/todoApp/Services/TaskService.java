@@ -13,9 +13,11 @@ import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoCreateTask;
 import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoShowAllAndShowById;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.support.NullValue;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,11 +45,20 @@ public class TaskService {
     public void addNewTask(TaskDtoCreateTask createTask){
         if (createTask.getDeadline().isBefore(LocalDate.now())){
             throw new WrongDateException("Wrong date!");
-        }else
+        }else {
+
             taskRepository.save(tasksMapping.mapTaskDtoCreateTaskToTask(createTask));
-           GroupTasks groupTasks = groupRepository.findById(createTask.getGroupId()).orElseThrow();
-           groupTasks.setDone(false);
-           groupRepository.save(groupTasks);
+            GroupTasks groupTasks = groupRepository.findById(createTask.getGroupId()).orElseThrow();
+            groupTasks.setDone(false);
+            if (groupTasks.getDeadline()==null) {
+                groupTasks.setDeadline(createTask.getDeadline());
+            } else {
+                groupTasks.getTasksInGroup().stream().map(Task::getDeadline).max(LocalDate::compareTo).ifPresent(groupTasks::setDeadline);
+
+            }
+            groupRepository.save(groupTasks);
+        }
+
     }
     public void updateTask(TaskDtoUpdateTask updateTask, Long id){
         if(updateTask.getDeadline().isBefore(LocalDate.now())){
@@ -70,7 +81,13 @@ public class TaskService {
     }
     public void deleteTask(Long id){
        Task task = taskRepository.findById(id).orElseThrow(()-> new NotFoundException("Task does not exist, id" +id));
-        taskRepository.delete(task);
+        GroupTasks groupTasks = groupRepository.findById(task.getGroup().getId()).orElseThrow();
+       taskRepository.delete(task);
+       if(groupTasks.getTasksInGroup().isEmpty()){
+            groupTasks.setDeadline(null);
+        }else{
+            //ustaw nowy dead line
+        }
     }
 
     public void setDoneTask(Long id){

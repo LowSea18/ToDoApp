@@ -19,8 +19,8 @@ public class GroupMapping {
         GroupDto groupDto= new GroupDto();
         groupDto.setId(groupTasks.getId());
         groupDto.setName(groupTasks.getName());
-        groupTasks.getTasksInGroup().stream().map(Task::getDeadline).max(LocalDate::compareTo).ifPresent(groupDto::setDeadline);
         groupDto.setDone(groupTasks.isDone());
+        groupDto.setDeadline(groupTasks.getDeadline());
         groupDto.setTasksInGroup(tasksMapping.mapListOfTaskToListOFTasDtoTaskInGroup(groupTasks.getTasksInGroup()));
         return groupDto;
     }
