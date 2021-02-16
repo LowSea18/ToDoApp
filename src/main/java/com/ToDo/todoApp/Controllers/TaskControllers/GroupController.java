@@ -25,7 +25,8 @@ public class GroupController {
     public void createGroup(@RequestBody GroupDtoCreateGroup createGroup){
         groupService.createGroup(createGroup);
     }
-
+    @DeleteMapping("/groups/{id}")
+    public void deleteGroup(@PathVariable(name = "id") Long id){ groupService.deleteGroup(id); }
 
 
 

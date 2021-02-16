@@ -7,6 +7,7 @@ import com.ToDo.todoApp.mappers.GroupMapping;
 import com.ToDo.todoApp.model.Dtos.GroupDtos.GroupDto;
 import com.ToDo.todoApp.model.Dtos.GroupDtos.GroupDtoCreateGroup;
 import com.ToDo.todoApp.model.Entity.GroupTasks;
+import com.ToDo.todoApp.model.Entity.Task;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Group;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class GroupService {
     @Autowired
     private GroupMapping groupMapping;
 
+    public GroupService (GroupRepository groupRepository, GroupMapping groupMapping){
+        this.groupRepository=groupRepository;
+        this.groupMapping=groupMapping;
+    }
+
     public List<GroupDto> showAllGroups(){
         List<GroupDto> groups = new ArrayList<>();
         groupRepository.findAll().forEach(g -> groups.add(groupMapping.mapGroupToGroupDto(g)) );
@@ -40,6 +46,16 @@ public class GroupService {
             throw  new AlreadyExistException("group already exist");
         }else
             groupRepository.save(groupMapping.mapCreateToGroup(createGroup));
+    }
+
+    public void deleteGroup(Long id){
+        GroupTasks groupTasks = groupRepository.findById(id).orElseThrow(()-> new NotFoundException("Group does not exist"));
+        if(groupTasks.getTasksInGroup().isEmpty()){
+        groupRepository.delete(groupTasks);
+        }else{
+            throw new AlreadyExistException("First, delete all tasks in this group");
+        }
+
     }
 
 

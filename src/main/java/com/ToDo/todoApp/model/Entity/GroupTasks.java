@@ -4,6 +4,7 @@ import com.ToDo.todoApp.model.Entity.Task;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @Entity(name = "group_tasks")
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class GroupTasks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,5 +7,5 @@ import lombok.Data;
 public class GroupDtoCreateGroup {
     @NotNull
     private String name;
-
+    private Long id;
 }

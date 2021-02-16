@@ -17,6 +17,9 @@ import java.util.List;
 public class TasksMapping {
     @Autowired
     private GroupRepository groupRepository;
+    public TasksMapping(GroupRepository groupRepository){
+        this.groupRepository=groupRepository;
+    }
 
     public TaskDtoShowAllAndShowById mapTaskToTaskDtoShowAllAndShowById(Task task){
         TaskDtoShowAllAndShowById taskDtoShowAllAndShowById = new TaskDtoShowAllAndShowById();

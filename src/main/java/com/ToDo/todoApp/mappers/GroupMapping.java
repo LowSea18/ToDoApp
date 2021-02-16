@@ -13,7 +13,11 @@ import java.util.Optional;
 @Component
 public class GroupMapping {
     @Autowired
-   private TasksMapping tasksMapping;
+   private final TasksMapping tasksMapping;
+
+    public GroupMapping(TasksMapping tasksMapping){
+        this.tasksMapping =tasksMapping;
+    }
 
     public GroupDto mapGroupToGroupDto (GroupTasks groupTasks){
         GroupDto groupDto= new GroupDto();

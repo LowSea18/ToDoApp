@@ -33,6 +33,12 @@ public class TaskService {
     @Autowired
     private GroupRepository groupRepository;
 
+    public TaskService(TaskRepository taskRepository, TasksMapping tasksMapping, GroupRepository groupRepository){
+        this.taskRepository =taskRepository;
+        this.tasksMapping=tasksMapping;
+        this.groupRepository=groupRepository;
+    }
+
     public List<TaskDtoShowAllAndShowById> showAllTasks(){
         List<TaskDtoShowAllAndShowById> taskDtoShowAllAndShowByIds = new ArrayList<>();
         taskRepository.findAll().forEach(t -> taskDtoShowAllAndShowByIds.add(tasksMapping.mapTaskToTaskDtoShowAllAndShowById(t)));
@@ -86,8 +92,9 @@ public class TaskService {
        if(groupTasks.getTasksInGroup().isEmpty()){
             groupTasks.setDeadline(null);
         }else{
-            //ustaw nowy dead line
-        }
+           groupTasks.getTasksInGroup().stream().map(Task::getDeadline).max(LocalDate::compareTo).ifPresent(groupTasks::setDeadline);
+       }
+       groupRepository.save(groupTasks);
     }
 
     public void setDoneTask(Long id){
