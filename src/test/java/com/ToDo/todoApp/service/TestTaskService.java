@@ -16,6 +16,7 @@ import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoUpdateTask;
 import com.ToDo.todoApp.model.Entity.GroupTasks;
 import com.ToDo.todoApp.model.Entity.Task;
 import liquibase.pro.packaged.G;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,78 +44,116 @@ import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@ActiveProfiles("test")
 public class TestTaskService {
 
+
+    @Autowired
+    TestEntityManager entityManager;
+
+
+  /*  @Before
+    public void setUp(){
+        GroupDtoCreateGroup createGroup = new GroupDtoCreateGroup();
+        createGroup.setName("Trip");
+        groupRepository.save(groupMapping.mapCreateToGroup(createGroup));
+
+        TaskDtoCreateTask createTask = new TaskDtoCreateTask();
+        TaskDtoCreateTask createTask1 = new TaskDtoCreateTask();
+        TaskDtoCreateTask createTask2 = new TaskDtoCreateTask();
+        createTask.setDescription("shopping");
+        createTask1.setDescription("car repair");
+        createTask2.setDescription("buying drugs");
+        createTask.setDeadline(LocalDate.of(2222,1,1));
+        createTask1.setDeadline(LocalDate.of(2232,1,1));
+        createTask2.setDeadline(LocalDate.of(2212,1,1));
+        createTask.setGroupId(1L);
+        createTask1.setGroupId(1L);
+        createTask2.setGroupId(1L);
+        taskService.addNewTask(createTask);
+        taskService.addNewTask(createTask1);
+        taskService.addNewTask(createTask2);
+    } */
+
     @Test
-    void should_notFoundTaskById_throw_NotFoundEx(){
+    void should_notFoundTaskById_throw_NotFoundEx() {
         var mockTaskRepo = mock(TaskRepository.class);
         when(mockTaskRepo.findById(anyLong())).thenReturn(Optional.empty());
-        TaskService taskService = new TaskService(mockTaskRepo,null,null);
+        TaskService taskService = new TaskService(mockTaskRepo, null, null);
         assertThrows(NotFoundException.class, () -> {
             taskService.showTaskById(anyLong());
         });
     }
+
     @Test
-    void should_notAddTask_with_wrong_date_throw_WrongDateEx()
-    {
-        TaskService taskService = new TaskService(null,null,null);
+    void should_notAddTask_with_wrong_date_throw_WrongDateEx() {
+        TaskService taskService = new TaskService(null, null, null);
         TaskDtoCreateTask createTask = new TaskDtoCreateTask();
-        createTask.setDeadline(LocalDate.of(1999,1,1));
+        createTask.setDeadline(LocalDate.of(1999, 1, 1));
         assertThrows(WrongDateException.class, () -> {
             taskService.addNewTask(createTask);
         });
     }
+
     @Test
-    void should_updateTask_with_wrong_date_throw_WrongDateEx(){
+    void should_updateTask_with_wrong_date_throw_WrongDateEx() {
         TaskDtoUpdateTask updateTask = new TaskDtoUpdateTask();
         updateTask.setDeadline(LocalDate.now().minusDays(2));
         TaskService taskService = new TaskService();
         assertThrows(WrongDateException.class, () -> {
-            taskService.updateTask(updateTask,3L);
+            taskService.updateTask(updateTask, 3L);
         });
     }
+
     @Test
-    void should_notFoundTaskToUpdate_throw_NotFoundEx(){
+    void should_notFoundTaskToUpdate_throw_NotFoundEx() {
         TaskDtoUpdateTask updateTask = new TaskDtoUpdateTask();
         updateTask.setDeadline(LocalDate.now().plusDays(2));
         var mocTaskRepository = mock(TaskRepository.class);
-        TaskService taskService = new TaskService(mocTaskRepository,null,null);
+        TaskService taskService = new TaskService(mocTaskRepository, null, null);
         when(mocTaskRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(NotFoundException.class, () -> {
-            taskService.updateTask(updateTask,anyLong());
+            taskService.updateTask(updateTask, anyLong());
         });
     }
+
     @Test
-    void should_notFoundTaskToDelete_throw_NotFoundEx(){
+    void should_notFoundTaskToDelete_throw_NotFoundEx() {
         var mocTaskRepository = mock(TaskRepository.class);
         when(mocTaskRepository.findById(anyLong())).thenReturn(Optional.empty());
-        TaskService taskService = new TaskService(mocTaskRepository,null,null);
+        TaskService taskService = new TaskService(mocTaskRepository, null, null);
         assertThrows(NotFoundException.class, () -> {
             taskService.deleteTask(anyLong());
         });
     }
+
     @Test
-    void should_notFoundTaskToSetDone_throw_NotFoundEx(){
+    void should_notFoundTaskToSetDone_throw_NotFoundEx() {
         var mocTaskRepository = mock(TaskRepository.class);
         when(mocTaskRepository.findById(anyLong())).thenReturn(Optional.empty());
-        TaskService taskService = new TaskService(mocTaskRepository,null,null);
+        TaskService taskService = new TaskService(mocTaskRepository, null, null);
         assertThrows(NotFoundException.class, () -> {
             taskService.setDoneTask(anyLong());
         });
     }
+
     @Test
-    void should_notSetDoneTOTask_taskAlreadyDone_throw_AlreadyExistEx(){
+    void should_notSetDoneTOTask_taskAlreadyDone_throw_AlreadyExistEx() throws AlreadyExistException {
         Task task = new Task();
         task.setId(1L);
         task.setDone(true);
         var mocTaskRepository = mock(TaskRepository.class);
-        TaskService taskService = new TaskService(mocTaskRepository,null,null);
+        TaskService taskService = new TaskService(mocTaskRepository, null, null);
 
         when(mocTaskRepository.findById(1L)).thenReturn(Optional.of(task));
         assertThrows(AlreadyExistException.class, () -> {
             taskService.setDoneTask(1L);
         });
     }
+
+
 
 }

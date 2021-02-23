@@ -1,4 +1,4 @@
-package com.ToDo.todoApp.Controllers.TaskControllers;
+package com.ToDo.todoApp.Controllers.GroupControllers;
 
 import com.ToDo.todoApp.Services.GroupService;
 import com.ToDo.todoApp.model.Dtos.GroupDtos.GroupDto;
