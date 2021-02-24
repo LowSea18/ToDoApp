@@ -51,33 +51,6 @@ import static org.mockito.Mockito.when;
 public class TestTaskService {
 
 
-    @Autowired
-    TestEntityManager entityManager;
-
-
-  /*  @Before
-    public void setUp(){
-        GroupDtoCreateGroup createGroup = new GroupDtoCreateGroup();
-        createGroup.setName("Trip");
-        groupRepository.save(groupMapping.mapCreateToGroup(createGroup));
-
-        TaskDtoCreateTask createTask = new TaskDtoCreateTask();
-        TaskDtoCreateTask createTask1 = new TaskDtoCreateTask();
-        TaskDtoCreateTask createTask2 = new TaskDtoCreateTask();
-        createTask.setDescription("shopping");
-        createTask1.setDescription("car repair");
-        createTask2.setDescription("buying drugs");
-        createTask.setDeadline(LocalDate.of(2222,1,1));
-        createTask1.setDeadline(LocalDate.of(2232,1,1));
-        createTask2.setDeadline(LocalDate.of(2212,1,1));
-        createTask.setGroupId(1L);
-        createTask1.setGroupId(1L);
-        createTask2.setGroupId(1L);
-        taskService.addNewTask(createTask);
-        taskService.addNewTask(createTask1);
-        taskService.addNewTask(createTask2);
-    } */
-
     @Test
     void should_notFoundTaskById_throw_NotFoundEx() {
         var mockTaskRepo = mock(TaskRepository.class);
