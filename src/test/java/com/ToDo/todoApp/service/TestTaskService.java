@@ -46,8 +46,6 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-@DataJpaTest
-@ActiveProfiles("test")
 public class TestTaskService {
 
 

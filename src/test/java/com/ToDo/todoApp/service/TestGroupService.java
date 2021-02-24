@@ -33,16 +33,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ActiveProfiles("test")
+
 @ExtendWith(MockitoExtension.class)
 public class TestGroupService {
-
-    @Autowired
-    TestEntityManager entityManager;
-    @Autowired
-    GroupRepository groupRepository;
-
-
 
     @Test
     void should_notFoundGroupToShow_throw_NotFoundEx() {
