@@ -48,6 +48,16 @@ public class TaskService {
         Task task =taskRepository.findById(id).orElseThrow(()->new NotFoundException("Task does not exist id:"+id));
         return tasksMapping.mapTaskToTaskDtoShowAllAndShowById(task);
     }
+
+    public List<TaskDtoShowAllAndShowById> showDoneTasks(boolean state){
+        if(state){
+        List<Task> doneTasks = taskRepository.findAll().stream().filter(Task::isDone).collect(Collectors.toList());
+            return tasksMapping.mapListOfTaskToListOfTaskDtoShowAllAndShowById(doneTasks);
+        }else{
+        List<Task> doneTasks = taskRepository.findAll().stream().filter(task -> !task.isDone()).collect(Collectors.toList());
+            return tasksMapping.mapListOfTaskToListOfTaskDtoShowAllAndShowById(doneTasks);
+        }
+    }
     public void addNewTask(TaskDtoCreateTask createTask){
         if (createTask.getDeadline().isBefore(LocalDate.now())){
             throw new WrongDateException("Wrong date!");

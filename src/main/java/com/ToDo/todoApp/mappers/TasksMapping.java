@@ -53,5 +53,11 @@ public class TasksMapping {
         return taskDtoTaskInGroups;
     }
 
+    public List<TaskDtoShowAllAndShowById> mapListOfTaskToListOfTaskDtoShowAllAndShowById(List <Task> tasks){
+        List<TaskDtoShowAllAndShowById> taskDtoShowAllAndShowByIds= new ArrayList<>();
+        tasks.forEach(t->taskDtoShowAllAndShowByIds.add(mapTaskToTaskDtoShowAllAndShowById(t)));
+        return taskDtoShowAllAndShowByIds;
+    }
+
 
 }

@@ -22,6 +22,11 @@ public class TaskController {
     public TaskDtoShowAllAndShowById showTaskById(@PathVariable (name = "id") Long id){
         return  taskService.showTaskById(id);
     }
+    @GetMapping("/tasks/search/done")
+    public List<TaskDtoShowAllAndShowById> showDoneTasks(@RequestParam(defaultValue = "true", name = "state") boolean state) {
+        return taskService.showDoneTasks(state);
+    }
+
     @PostMapping("/tasks")
     public void addTask(@RequestBody TaskDtoCreateTask createTask){
         taskService.addNewTask(createTask);
