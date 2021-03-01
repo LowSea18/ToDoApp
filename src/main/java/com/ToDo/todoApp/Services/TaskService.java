@@ -122,8 +122,11 @@ public class TaskService {
             }
 
         }
-
-
+    }
+    public List<TaskDtoShowAllAndShowById> showTaskByGroup(Long groupId){
+        List<TaskDtoShowAllAndShowById> taskDtoShowAllAndShowByIdss = new ArrayList<>();
+        taskDtoShowAllAndShowByIdss = tasksMapping.mapListOfTaskToListOfTaskDtoShowAllAndShowById(taskRepository.findAll().stream().filter(t-> t.getGroup().getId().equals(groupId)).collect(Collectors.toList()));
+        return taskDtoShowAllAndShowByIdss;
     }
 
 

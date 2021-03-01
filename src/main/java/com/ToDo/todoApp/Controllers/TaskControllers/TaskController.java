@@ -45,6 +45,6 @@ public class TaskController {
         taskService.setDoneTask(id);
     }
 
-    //todo jak sie robi taska to sprawdzenie czy w jego grupie wszsytkie sa zrobione jak tam to zmieniasz grouptask is done
+
 
 }
