@@ -26,6 +26,10 @@ public class TaskController {
     public List<TaskDtoShowAllAndShowById> showDoneTasks(@RequestParam(defaultValue = "true", name = "state") boolean state) {
         return taskService.showDoneTasks(state);
     }
+    @GetMapping("/tasks/sorted")
+    public List<TaskDtoShowAllAndShowById> showByDeadLine(){
+        return taskService.showByDeadLine();
+    }
 
     @PostMapping("/tasks")
     public void addTask(@RequestBody TaskDtoCreateTask createTask){

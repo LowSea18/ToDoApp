@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,6 +128,12 @@ public class TaskService {
         List<TaskDtoShowAllAndShowById> taskDtoShowAllAndShowByIdss = new ArrayList<>();
         taskDtoShowAllAndShowByIdss = tasksMapping.mapListOfTaskToListOfTaskDtoShowAllAndShowById(taskRepository.findAll().stream().filter(t-> t.getGroup().getId().equals(groupId)).collect(Collectors.toList()));
         return taskDtoShowAllAndShowByIdss;
+    }
+
+    public List<TaskDtoShowAllAndShowById> showByDeadLine(){
+        List<TaskDtoShowAllAndShowById> list = new ArrayList<>();
+        list= tasksMapping.mapListOfTaskToListOfTaskDtoShowAllAndShowById(taskRepository.findAll().stream().filter(task -> !task.isDone()).sorted(Comparator.comparing(Task::getDeadline)).collect(Collectors.toList()));
+        return list;
     }
 
 
