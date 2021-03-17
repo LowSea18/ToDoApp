@@ -18,4 +18,5 @@ public class TaskDtoShowAllAndShowById {
     private boolean done;
     private LocalDate deadline;
     private Long groupId;
+    private Long userId;
 }

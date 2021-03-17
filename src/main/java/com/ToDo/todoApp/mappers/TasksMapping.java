@@ -1,6 +1,7 @@
 package com.ToDo.todoApp.mappers;
 
 import com.ToDo.todoApp.Repositories.GroupRepository;
+import com.ToDo.todoApp.Repositories.UserRepository;
 import com.ToDo.todoApp.exception.NotFoundException;
 import com.ToDo.todoApp.model.Dtos.TaskDtos.TaskDtoTaskInGroup;
 import com.ToDo.todoApp.model.Entity.Task;
@@ -17,6 +18,8 @@ import java.util.List;
 public class TasksMapping {
     @Autowired
     private GroupRepository groupRepository;
+    @Autowired
+    private UserRepository userRepository;
     public TasksMapping(GroupRepository groupRepository){
         this.groupRepository=groupRepository;
     }
@@ -28,6 +31,7 @@ public class TasksMapping {
         taskDtoShowAllAndShowById.setDone(task.isDone());
         taskDtoShowAllAndShowById.setDescription(task.getDescription());
         taskDtoShowAllAndShowById.setGroupId(task.getGroup().getId());
+        taskDtoShowAllAndShowById.setUserId(task.getUser().getId());
         return taskDtoShowAllAndShowById;
     }
 
@@ -36,6 +40,7 @@ public class TasksMapping {
         task.setDeadline(createTask.getDeadline());
         task.setDescription(createTask.getDescription());
         task.setGroup(groupRepository.findById(createTask.getGroupId()).orElseThrow(() -> new NotFoundException("Group  does not exist")));
+        task.setUser(userRepository.findById(createTask.getUserId()).orElseThrow(()->new NotFoundException(("User do not exist"))));
         return task;
     }
 

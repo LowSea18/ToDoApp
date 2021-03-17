@@ -1,5 +1,6 @@
 package com.ToDo.todoApp.model.Entity;
 
+import com.ToDo.todoApp.model.Roles.Roles;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -23,4 +24,9 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private GroupTasks group;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 }

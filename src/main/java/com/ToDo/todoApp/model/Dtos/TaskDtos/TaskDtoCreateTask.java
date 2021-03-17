@@ -17,4 +17,5 @@ public class TaskDtoCreateTask {
     @NotNull
     private LocalDate deadline;
     private  Long groupId;
+    private Long userId;
 }

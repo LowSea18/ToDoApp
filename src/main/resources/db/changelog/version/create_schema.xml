@@ -41,6 +41,9 @@
             <column  name="group_id"  type="bigint">
                 <constraints nullable="true" foreignKeyName="fk" references="group_tasks(id)"/>
             </column>
+            <column  name="user_id"  type="bigint">
+                <constraints nullable="true" foreignKeyName="fkk" references="users(id)"/>
+            </column>
         </createTable>
     </changeSet>
 
